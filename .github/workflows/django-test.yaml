@@ -83,7 +83,7 @@ jobs:
       - name: "Migrate Database"
         run: |
            python manage.py migrate
-      - name: "Run test""
+      - name: "Run test"
         run: |
           python manage.py test
       - name: "Run server"

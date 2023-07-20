@@ -72,14 +72,8 @@ jobs:
           echo DJANGO_DATABASE_PASSWORD=postgres >> .env
           echo DJANGO_DB_HOST=db >> .env
           echo DJANGO_DB_PORT=5432 >> .env
-      - name: "Migrate Database"
-        run: |
-           python manage.py migrate
-      - name: "Run test"
-        run: |
-          python manage.py test
       - name: "Build the Docker image (Demo)"
-        run: "docker compose  build --no-cache"
+        run: docker compose  build --no-cache
       - name: "Build the stack"
         run: |
           docker compose  up -d

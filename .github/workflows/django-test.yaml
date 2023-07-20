@@ -58,6 +58,24 @@ jobs:
       - name: Install requirements
         run: |
           pip install -r requirements.txt
+      - name: "Make envfile"
+        run: |
+          touch .env
+          echo PROJECT_NAME=Socket Django channels >> .env
+          echo DJANGO_DEBUG=True >> .env
+          echo SECRET_KEY=django-insecure-t=q3r)r6mi93#qk&+x(!q7y7)m^_thr2shcedb*$t4$u#4m$1t >> .env
+          echo ALLOWED_HOSTS=127.0.0.1,127.0.0.1:8000 >> .env
+          echo DJANGO_CORS_ORIGIN_ALLOW_ALL=True >> .env
+          echo DJANGO_DB_ENGINE=django.db.backends.postgresql_psycopg2 >> .env
+          echo DJANGO_DATABASE_NAME=postgres >> .env
+          echo DJANGO_DATABASE_USER=postgres >> .env
+          echo DJANGO_DATABASE_PASSWORD=postgres >> .env
+          echo DJANGO_DB_HOST=postgres >> .env
+  #          echo DJANGO_DATABASE_NAME=${{ secrets.DJANGO_DATABASE_NAME }} >> .env
+  #          echo DJANGO_DATABASE_USER=${{ secrets.DJANGO_DATABASE_USER }} >> .env
+  #          echo DJANGO_DATABASE_PASSWORD=${{ secrets.DJANGO_DATABASE_PASSWORD }} >> .env
+  #          echo DJANGO_DB_HOST=${{ secrets.DJANGO_DB_HOST }} >> .env
+          echo DJANGO_DB_PORT=5432>> .env
       - name: Run Tests
         # Step specific environment variables
         env:

@@ -59,14 +59,6 @@ jobs:
         run: |
           pip install -r requirements.txt
       - name: "Make envfile"
-        env:
-          DEBUG: "0"
-          DJANGO_SECRET_KEY: ${{ env.DJANGO_SECRET_KEY }}
-          DB_USERNAME: ${{ env.POSTGRES_USER }}
-          DB_PASSWORD: ${{ env.POSTGRES_PASSWORD }}
-          DB_HOST: ${{ env.POSTGRES_HOST }}
-          DB_DATABASE: ${{ env.POSTGRES_DB }}
-          DB_PORT: ${{ env.POSTGRES_PORT }}
         run: |
           touch .env
           echo PROJECT_NAME=Socket Django channels >> .env
@@ -74,11 +66,11 @@ jobs:
           echo SECRET_KEY="django-insecure-t=q3r)r6mi93#qk&+x(!q7y7)m^_thr2shcedb*$t4$u#4m$1t" >> .env
           echo ALLOWED_HOSTS=127.0.0.1,127.0.0.1:8000 >> .env
           echo DJANGO_CORS_ORIGIN_ALLOW_ALL=True >> .env
-          echo DJANGO_DB_ENGINE=django.db.backends.postgresql_psycopg2 >> .env
+          echo DJANGO_DB_ENGINE=django.db.backends.postgresql >> .env
           echo DJANGO_DATABASE_NAME=postgres >> .env
           echo DJANGO_DATABASE_USER=postgres >> .env
           echo DJANGO_DATABASE_PASSWORD=postgres >> .env
-          echo DJANGO_DB_HOST=postgres >> .env
+          echo DJANGO_DB_HOST=localhost >> .env
           echo DJANGO_DB_PORT=5432 >> .env
       - name: "Migrate Database"
         run: |

@@ -1,0 +1,183 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css"
+          integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+
+    <title>Chat UI</title>
+    <link rel="stylesheet" href="{% static 'css/chat.css' %}" />
+
+</head>
+<body>
+
+<main class="content">
+    <div class="container p-0">
+
+        <h1 class="h3 mb-3">Messages     <a href="{% url 'logout' %}"> <button class="btn btn-danger float-right">Logout</button></a>
+        <a href="{% url 'home' %}"> <button class="btn btn-primary mr-2 float-right">Go back to home page</button></a>
+        </h1>
+
+        <div class="card">
+            <div class="row g-0">
+                <div class="col-12 col-lg-5 col-xl-3 border-right">
+
+                    <div class="px-4 d-none d-md-block">
+                        <div class="d-flex align-items-center">
+                            <div class="flex-grow-1">
+                                <input type="text" class="form-control my-3" placeholder="Search...">
+                            </div>
+                        </div>
+                    </div>
+                    {% for room in rooms %}
+                        {% if current_room.uuid == room.uuid %}
+                            <a href="/room/{{ room.uuid }}" class="list-group-item list-group-item-action border-0 active">
+                        {% else %}
+                            <a href="/room/{{ room.uuid }}" class="list-group-item list-group-item-action border-0 ">
+                        {% endif %}
+                            <div class="d-flex align-items-start">
+                                <img src="https://bootdey.com/img/Content/avatar/avatar5.png" class="rounded-circle mr-1"
+                                     alt="Vanessa Tucker" width="40" height="40">
+                                <div class="flex-grow-1 ml-3">
+                                    {{ room.name }}
+                                    <div class="small"><span class="fas fa-circle chat-online"></span> Online</div>
+                                </div>
+                            </div>
+                        </a>
+                    {% endfor %}
+                    <hr class="d-block d-lg-none mt-1 mb-0">
+                </div>
+                <div class="col-12 col-lg-7 col-xl-9">
+                    <div class="py-2 px-4 border-bottom d-none d-lg-block">
+                        <div class="d-flex align-items-center py-1">
+                            <div class="position-relative">
+                                <img src="https://bootdey.com/img/Content/avatar/avatar3.png"
+                                     class="rounded-circle mr-1" alt="{{ request.user.first_name }} {{ request.user.last_name }}" width="40" height="40">
+                            </div>
+                            <div class="flex-grow-1 pl-3">
+                                <strong>{{ request.user.first_name }} {{ request.user.last_name }}</strong>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="position-relative">
+                        <div class="chat-messages p-4" id="chat-log">
+                            {% for message_event in message_and_event_list %}
+                                {% if message_event.author_id == request.user.id %}
+                                    <div class="chat-message-left pb-4">
+                                        <div>
+                                            <img src="https://bootdey.com/img/Content/avatar/avatar3.png"
+                                                 class="rounded-circle mr-1"
+                                                 alt="{{ message_event.author.first_name }} {{ message_event.author.last_name }}"
+                                                 width="40"
+                                                 height="40">
+                                            <div class="text-muted small text-nowrap mt-2">{{ message_event.timestamp | date:'Y-m-d H:i A' }}</div>
+                                        </div>
+                                        <div class="flex-shrink-1 bg-light rounded py-2 px-3 ml-3">
+                                            <div class="font-weight-bold mb-1">{{ message_event.author.first_name }} {{ message_event.author.last_name }}</div>
+                                           {{ message_event.content }}
+                                        </div>
+                                    </div>
+                                {% else %}
+                                    <div class="chat-message-right pb-4">
+                                        <div>
+                                            <img src="https://bootdey.com/img/Content/avatar/avatar1.png"
+                                                 class="rounded-circle mr-1" alt="Chris Wood" width="40" height="40">
+                                           <div class="text-muted small text-nowrap mt-2">{{ message_event.timestamp | date:'Y-m-d H:i A' }}</div>
+                                        </div>
+                                        <div class="flex-shrink-1 bg-light rounded py-2 px-3 mr-3">
+                                            <div class="font-weight-bold mb-1">{{ message_event.author.first_name }} {{ message_event.author.last_name  }}</div>
+                                            {{ message_event.content }}
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+
+                        </div>
+                    </div>
+                {% if room_members %}
+                    <div class="flex-grow-0 py-3 px-4 border-top">
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="Type your message" id="chat-message-input">
+                            <button class="btn btn-primary" id="chat-message-submit">Send</button>
+                        </div>
+                    </div>
+                {% else %}
+                    <div class="flex-grow-0 py-3 px-4 border-top">
+                            <div class="input-group">
+                                Please Join the group for chat
+                            </div>
+                        </div>
+                {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx"
+        crossorigin="anonymous"></script>
+
+
+<script>
+    const current_user = "{{ request.user.email }}"
+    const base_url =  `${window.location.host}${window.location.pathname}`;
+    const chatSocket = new WebSocket(`ws://${base_url}`);
+
+    chatSocket.onopen = function(e) {
+        console.log("connected")
+    }
+    chatSocket.onclose = function(e) {
+        console.error('Chat socket closed unexpectedly');
+    };
+
+        chatSocket.onmessage = function (e) {
+            const data = JSON.parse(e.data);
+            let html = "";
+            if (data.author_email == current_user) {
+                html += '<div class="chat-message-left pb-4">';
+            } else {
+                html += '<div class="chat-message-right pb-4">';
+            }
+            html+= '    <div>';
+            html+= '        <img src="https://bootdey.com/img/Content/avatar/avatar3.png" class="rounded-circle mr-1" alt="Sharon Lessman" width="40" height="40">';
+            html+= '        <div class="text-muted small text-nowrap mt-2">2:34 am</div>';
+            html+= '    </div>';
+            html+= '    <div class="flex-shrink-1 bg-light rounded py-2 px-3 ml-3">';
+            html+= `        <div class="font-weight-bold mb-1">${data.author_name}</div>`
+            html+= `            ${data.message}`
+            html+= '    </div>'
+            html+= '</div>'
+
+            document.querySelector('#chat-log').innerHTML+= html;
+
+        };
+
+    document.querySelector('#chat-message-input').focus();
+    document.querySelector('#chat-message-input').onkeyup = function(e) {
+    if (e.keyCode === 13) { // enter, return
+        document.querySelector('#chat-message-submit').click();
+        }
+    };
+
+    document.querySelector('#chat-message-submit').onclick = function(e) {
+        const messageInputDom = document.querySelector('#chat-message-input');
+            const message = messageInputDom.value;
+            chatSocket.send(JSON.stringify({
+            'type':"text_message",
+            "author": "{{request.user}}" ,
+            'message': message
+            }));
+        messageInputDom.value = '';
+        };
+
+</script>
+
+</body>
+</html>

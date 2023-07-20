@@ -26,23 +26,6 @@ jobs:
       POSTGRES_DB: djtesting
       POSTGRES_PORT: 5432
       DJANGO_SECRET_KEY: test-key-not-good
-    services:
-      postgres_main:
-        image: postgres:12.2-alpine
-        env:
-          POSTGRES_USER: ${{ env.DJANGO_DATABASE_USER }}
-          POSTGRES_PASSWORD: ${{ env.DJANGO_DATABASE_PASSWORD }}
-          POSTGRES_DB: ${{ env.DJANGO_DATABASE_NAME }}
-          POSTGRES_HOST_AUTH_METHOD: trust
-          POSTGRES_HOST: postgres
-        ports:
-          - 5432:5432
-        options: >-
-          --health-cmd pg_isready 
-          --health-interval 10s 
-          --health-timeout 5s 
-          --health-retries 5
-    # If you want to test multiple python version(s)
     strategy:
       matrix:
         python-version: ["3.9"] # ["3.8", "3.9", "3.10"]
@@ -78,3 +61,9 @@ jobs:
         run: |
           docker compose  up -d
           docker rmi -f $(docker images -f "dangling=true" -q) || true
+      - name: "Migrate Database"
+        run: |
+           python manage.py migrate
+      - name: "Run test"
+        run: |
+          python manage.py test

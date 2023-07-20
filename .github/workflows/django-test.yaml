@@ -70,7 +70,7 @@ jobs:
           echo DJANGO_DATABASE_NAME=postgres >> .env
           echo DJANGO_DATABASE_USER=postgres >> .env
           echo DJANGO_DATABASE_PASSWORD=postgres >> .env
-          echo DJANGO_DB_HOST=localhost >> .env
+          echo DJANGO_DB_HOST=db >> .env
           echo DJANGO_DB_PORT=5432 >> .env
       - name: "Migrate Database"
         run: |
@@ -78,3 +78,9 @@ jobs:
       - name: "Run test"
         run: |
           python manage.py test
+      - name: "Build the Docker image (Demo)"
+        run: "docker compose  build --no-cache"
+      - name: "Build the stack"
+        run: |
+          docker compose  up -d
+          docker rmi -f $(docker images -f "dangling=true" -q) || true

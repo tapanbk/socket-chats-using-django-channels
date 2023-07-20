@@ -71,11 +71,7 @@ jobs:
           echo DJANGO_DATABASE_USER=postgres >> .env
           echo DJANGO_DATABASE_PASSWORD=postgres >> .env
           echo DJANGO_DB_HOST=postgres >> .env
-  #          echo DJANGO_DATABASE_NAME=${{ secrets.DJANGO_DATABASE_NAME }} >> .env
-  #          echo DJANGO_DATABASE_USER=${{ secrets.DJANGO_DATABASE_USER }} >> .env
-  #          echo DJANGO_DATABASE_PASSWORD=${{ secrets.DJANGO_DATABASE_PASSWORD }} >> .env
-  #          echo DJANGO_DB_HOST=${{ secrets.DJANGO_DB_HOST }} >> .env
-          echo DJANGO_DB_PORT=5432>> .env
+          echo DJANGO_DB_PORT=5432 >> .env
       - name: Run Tests
         # Step specific environment variables
         env:

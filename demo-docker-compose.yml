@@ -1,0 +1,24 @@
+version: "3.9"
+services:
+  web:
+    build: .
+    volumes:
+      - .:/app
+    environment:
+      - SECRET_KEY=justdev
+      - DJANGO_SETTINGS_MODULE=socket_channels.settings
+      - DATABASE_PORT=5432
+      - DATABASE_NAME=postgres
+      - DATABASE_USER=postgres
+      - DATABASE_PASSWORD=postgres
+      - POSTGRES_HOST_AUTH_METHOD=trust
+
+    ports:
+      - "8000:8000"
+    tty: true
+    init: true
+    command: >
+      bash -c "python manage.py makemigrations
+      && python manage.py migrate
+      && python manage.py runserver 0.0.0.0:8000"
+

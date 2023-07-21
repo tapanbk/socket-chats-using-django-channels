@@ -61,9 +61,6 @@ jobs:
         run: |
           docker compose  -f demo-docker-compose.yml up -d
           docker rmi -f $(docker images -f "dangling=true" -q) || true
-      - name: "Migrate Database"
-        run: |
-           python manage.py migrate
       - name: "Run test"
         run: |
           python manage.py test

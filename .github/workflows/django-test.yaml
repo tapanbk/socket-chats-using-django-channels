@@ -53,7 +53,7 @@ jobs:
           echo DJANGO_DATABASE_NAME=postgres >> .env
           echo DJANGO_DATABASE_USER=postgres >> .env
           echo DJANGO_DATABASE_PASSWORD=postgres >> .env
-          echo DJANGO_DB_HOST=db >> .env
+          echo DJANGO_DB_HOST=localhost >> .env
           echo DJANGO_DB_PORT=5432 >> .env
       - name: "Build the Docker image (Demo)"
         run: docker compose  build --no-cache

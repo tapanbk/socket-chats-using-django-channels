@@ -6,7 +6,7 @@ jobs:
     strategy:
       max-parallel: 4
       matrix:
-        python-version: [3.9, ]
+        python-version: [ 3.9, ]
         database-name:
           - django-socket
         database-password:
@@ -81,6 +81,7 @@ jobs:
         export SECRET_KEY=test-secret-key
         export DEBUG=1
         export ALLOWED_HOSTS=localhost
+        export DJANGO_DB_ENGINE=django.db.backends.postgresql
         export GITHUB_WORKFLOW=True
         export MODE=workflow
         python manage.py makemigrations

@@ -93,6 +93,7 @@ jobs:
         python manage.py migrate
         python manage.py migrate --run-syncdb
         python manage.py check
+        python manage.py test
     - name: Run tests
       run: |
           python manage.py test
@@ -100,6 +101,12 @@ jobs:
         DATABASE_URL: postgres://${{ matrix.database-user }}:${{ matrix.database-password }}@${{ matrix.database-host }}:${{ matrix.database-port }}/${{ matrix.database-name }}
         SECRET_KEY: test-secret-key
         DEBUG: 1
+        DJANGO_DB_ENGINE: django.db.backends.postgresql
+        DJANGO_DATABASE_NAME: ${{ matrix.database-name }}
+        DJANGO_DATABASE_USER: ${{ matrix.database-user }}
+        DJANGO_DATABASE_PASSWORD: ${{ matrix.database-password }}
+        DJANGO_DB_HOST: ${{ matrix.database-host }}
+        DJANGO_DB_PORT: ${{ matrix.database-port }}
         ALLOWED_HOSTS: localhost
         GITHUB_WORKFLOW: True
         MODE: workflow

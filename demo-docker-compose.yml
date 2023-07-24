@@ -12,9 +12,9 @@ services:
       - DATABASE_USER=postgres
       - DATABASE_PASSWORD=postgres
       - POSTGRES_HOST_AUTH_METHOD=trust
-
     ports:
       - "8000:8000"
+      - "5433:5432"
     tty: true
     init: true
     command: >

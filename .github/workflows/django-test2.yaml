@@ -82,6 +82,11 @@ jobs:
         export DEBUG=1
         export ALLOWED_HOSTS=localhost
         export DJANGO_DB_ENGINE=django.db.backends.postgresql
+        export DJANGO_DATABASE_NAME=${{ matrix.database-name }}
+        export DJANGO_DATABASE_USER=${{ matrix.database-user }}
+        export DJANGO_DATABASE_PASSWORD=${{ matrix.database-password }}
+        export DJANGO_DB_HOST=${{ matrix.database-host }}
+        export DJANGO_DB_PORT=${{ matrix.database-port }}
         export GITHUB_WORKFLOW=True
         export MODE=workflow
         python manage.py makemigrations

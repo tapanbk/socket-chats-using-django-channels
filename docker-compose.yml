@@ -1,35 +1,82 @@
-version: "3.9"
+version: '3.7'
+
+networks:
+  chat:
+    driver: bridge
+
 volumes:
-    pgdata:
+  postgres_data_dev: {}  # Volume for PostgreSQL data
+  ssl_certs: {}  # Volume for SSL certificates
+  s3_media: {}  # Volume for S3 media storage
+  redis: {}  # Volume for Redis data
 
 services:
-  web:
-    build: .
+  chat_proxy:
+    container_name: chat-proxy  # Name of the Nginx container
+    image: nginx:latest
     volumes:
-      - .:/app
-    environment:
-      - SECRET_KEY=justdev
-      - DJANGO_SETTINGS_MODULE=socket_channels.settings
-      - DATABASE_PORT=5432
-      - DATABASE_NAME=postgres
-      - DATABASE_USER=postgres
-      - DATABASE_PASSWORD=postgres
-      - POSTGRES_HOST_AUTH_METHOD=trust
-
+      - ./..docker/nginx:/etc/nginx/conf.d  # Mounting Nginx configuration files
     ports:
-      - "8000:8000"
-    tty: true
-    init: true
-    command: >
-      bash -c "python manage.py makemigrations
-      && python manage.py migrate
-      && python manage.py runserver 0.0.0.0:8000"
+      - "127.0.0.1:80:80"  # Forwarding host port 80 to container port 80
+      - "127.0.0.1:443:443"  # Forwarding host port 443 to container port 443
     depends_on:
-      - db
-  db:
-    image: postgres
-    restart: always
-    volumes:
-      - pgdata:/var/lib/posrgresql/data
+      - chat_django  # Dependency on the Django container
+    networks:
+      - chat
+
+  chat_s3:
+    image: adobe/s3mock
+    container_name: chat-s3  # Name of the S3 container
     ports:
-      - "5432:5432"
+      - '9091:9090'  # Forwarding host port 9090 to container port 9090
+    environment:
+      - initialBuckets=chat_media  # Initial bucket names for S3 storage
+      - root=/app/media
+    volumes:
+      - s3_media:/app/media  # Mounting S3 media volume
+    networks:
+      - chat
+
+  chat_redis:
+    container_name: chat-redis  # Name of the Redis container
+    image: redis
+    ports:
+      - 6379:6379  # Forwarding host port 6379 to container port 6379
+    volumes:
+      - redis:/data  # Mounting Redis data volume
+    networks:
+      - chat
+
+  chat_postgres:
+    container_name: chat-postgres  # Name of the PostgreSQL container
+    image: postgres:9.6
+    volumes:
+      - postgres_data_dev:/var/lib/postgresql/data  # Mounting PostgreSQL data volume
+    ports:
+      - 5432:5432  # Forwarding host port 5432 to container port 5432
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    networks:
+      - chat
+
+  chat_django:
+    container_name: chat-django  # Name of the Django container
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: python manage.py runserver 0.0.0.0:8000  # Running Django development server
+    ports:
+      - 8000:8000  # Forwarding host port 8000 to container port 8000
+    depends_on:
+      - chat_postgres
+      - chat_redis
+      - chat_s3
+    environment:
+      - DJANGO_READ_DOT_ENV_FILE=true
+    volumes:
+      - .:/code  # Mounting project code
+    networks:
+      - chat
+

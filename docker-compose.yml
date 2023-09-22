@@ -90,7 +90,7 @@ services:
     restart: always
 
   chat_django:
-    container_name: chat-django  # Name of the Django container
+    container_name: chat_django  # Name of the Django container
     build:
       context: .
       dockerfile: Dockerfile

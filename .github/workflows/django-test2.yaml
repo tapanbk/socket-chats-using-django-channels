@@ -18,7 +18,8 @@ jobs:
       run: |
         export GITHUB_WORKFLOW=True
         export MODE="Test"
-        docker-compose up --build -d
+        docker-compose build --no-cache
+        docker-compose up
         docker compose exec chat_django python  manage.py test
     - name: Stop containers
       if: always()

@@ -57,13 +57,17 @@ RUN addgroup chat && adduser -D chat -G chat -h /home/chat
 
 ENV HOME /home/chat
 
-ENV APP_DIR ${HOME}/chat
+ENV APP_DIR ${HOME}/socket_chat
 
 WORKDIR ${APP_DIR}
 
 ADD requirements.txt ${APP_DIR}/
 
 RUN pip install -r ${APP_DIR}/requirements.txt
+
+
+#COPY ./application_runner.sh ${WORKDIR}/application_runner.sh
+#RUN chmod +x ${WORKDIR}/application_runner.sh
 
 COPY ./ ${APP_DIR}
 
@@ -73,4 +77,17 @@ USER chat
 
 EXPOSE 8000
 
-ENTRYPOINT sh -c "python manage.py runserver 0.0.0.0:8000"
+#ENTRYPOINT ["/home/chat/chat/application_runner.sh"]
+
+#COPY . .
+#
+## new
+## run entrypoint.sh
+#ENTRYPOINT ["/usr/src/app/entrypoint.sh"]
+
+#ENTRYPOINT ["application_runner.sh"]
+##
+#ENTRYPOINT sh -c "python manage.py runserver 0.0.0.0:8000"
+
+#ENTRYPOINT ["sh", "-c", "$APP_DIR/application_runner.sh"]
+

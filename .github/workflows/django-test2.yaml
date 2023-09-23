@@ -27,8 +27,8 @@ jobs:
         docker-compose up -d
     - name: Run the test cases
       run: |
-        python manage.py migrate
-        python manage.py test
+        docker-compose exec -T chat_django python  manage.py migrate
+        docker-compose exec -T chat_django python  manage.py test
     - name: Stop containers
       if: always()
       run: docker-compose -f "docker-compose.yml" down

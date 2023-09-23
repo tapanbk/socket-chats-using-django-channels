@@ -10,32 +10,32 @@ volumes:
   redis: {}  # Volume for Redis data
 
 services:
-  chat_proxy:
-    container_name: chat-proxy  # Name of the Nginx container
-    image: nginx:latest
-    volumes:
-      - ./..docker/nginx:/etc/nginx/conf.d  # Mounting Nginx configuration files
-    ports:
-      - "127.0.0.1:80:80"  # Forwarding host port 80 to container port 80
-      - "127.0.0.1:443:443"  # Forwarding host port 443 to container port 443
-    depends_on:
-      - chat_django  # Dependency on the Django container
-      - chat_postgres
-    networks:
-      - chat
+#  chat_proxy:
+#    container_name: chat-proxy  # Name of the Nginx container
+#    image: nginx:latest
+#    volumes:
+#      - ./..docker/nginx:/etc/nginx/conf.d  # Mounting Nginx configuration files
+#    ports:
+#      - "127.0.0.1:80:80"  # Forwarding host port 80 to container port 80
+#      - "127.0.0.1:443:443"  # Forwarding host port 443 to container port 443
+#    depends_on:
+#      - chat_django  # Dependency on the Django container
+#      - chat_postgres
+#    networks:
+#      - chat
 
-  chat_s3:
-    image: adobe/s3mock
-    container_name: chat-s3  # Name of the S3 container
-    ports:
-      - '9091:9090'  # Forwarding host port 9090 to container port 9090
-    environment:
-      - initialBuckets=chat_media  # Initial bucket names for S3 storage
-      - root=/app/media
-    volumes:
-      - s3_media:/app/media  # Mounting S3 media volume
-    networks:
-      - chat
+#  chat_s3:
+#    image: adobe/s3mock
+#    container_name: chat-s3  # Name of the S3 container
+#    ports:
+#      - '9091:9090'  # Forwarding host port 9090 to container port 9090
+#    environment:
+#      - initialBuckets=chat_media  # Initial bucket names for S3 storage
+#      - root=/app/media
+#    volumes:
+#      - s3_media:/app/media  # Mounting S3 media volume
+#    networks:
+#      - chat
 
   chat_redis:
     container_name: chat-redis  # Name of the Redis container
@@ -68,6 +68,25 @@ services:
 #      - chat
 #    restart: always
 
+  chat_django:
+    container_name: chat_django  # Name of the Django container
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: python manage.py runserver 0.0.0.0:8000  # Running Django development server
+    ports:
+      - 8000:8000  # Forwarding host port 8000 to container port 8000
+    depends_on:
+      - chat_postgres
+#      - chat_redis
+#      - chat_s3
+    environment:
+      - DJANGO_READ_DOT_ENV_FILE=true
+    volumes:
+      - .:/home/chat/socket_chat  # Mounting project code
+    networks:
+      - chat
+
   chat_postgres:
     image: postgres:alpine
     container_name: chat_postgres
@@ -89,24 +108,7 @@ services:
       - chat
     restart: always
 
-  chat_django:
-    container_name: chat_django  # Name of the Django container
-    build:
-      context: .
-      dockerfile: Dockerfile
-    command: python manage.py runserver 0.0.0.0:8000  # Running Django development server
-    ports:
-      - 8000:8000  # Forwarding host port 8000 to container port 8000
-    depends_on:
-      - chat_postgres
-      - chat_redis
-      - chat_s3
-    environment:
-      - DJANGO_READ_DOT_ENV_FILE=true
-    volumes:
-      - .:/home/chat/socket_chat  # Mounting project code
-    networks:
-      - chat
+
 
 
 

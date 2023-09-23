@@ -25,8 +25,6 @@ jobs:
         export SECRET_KEY="django-insecure-t=q3r)r6mi93#qk&+x(!q7y7)m^_thr2shcedb*$t4$u#4m$1t"
         docker-compose build --no-cache
         docker-compose up -d
-    - name: Run the test cases
-      run: |
         docker-compose exec -T chat_django python  manage.py migrate
         docker-compose exec -T chat_django python  manage.py test
     - name: Stop containers

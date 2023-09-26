@@ -29,7 +29,11 @@ jobs:
     - name: Run containers
       run: |
         docker-compose -f docker-compose.yml up -d
-    - name: Run Django tests
+    - name: Migrate
+      run: |
+        docker-compose -f docker-compose.yml exec api python manage.py makemigrations
+        docker-compose -f docker-compose.yml exec api python manage.py migrate
+    - name: Run test
       run: |
         docker-compose -f docker-compose.yml exec api python manage.py test
     - name: Stop and remove containers

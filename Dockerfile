@@ -77,7 +77,7 @@ USER chat
 
 EXPOSE 8000
 
-#ENTRYPOINT ["/home/chat/chat/application_runner.sh"]
+ENTRYPOINT ["/home/chat/socket_chat/application_runner.sh"]
 
 #COPY . .
 #

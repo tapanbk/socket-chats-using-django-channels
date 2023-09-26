@@ -23,10 +23,6 @@ jobs:
         export DJANGO_CORS_ORIGIN_ALLOW_ALL=True
         export DJANGO_DB_ENGINE="django.db.backends.postgresql"
         export SECRET_KEY="django-insecure-t=q3r)r6mi93#qk&+x(!q7y7)m^_thr2shcedb*$t4$u#4m$1t"
-        docker-compose build --no-cache
-        docker-compose up -d
-        docker-compose exec -T chat_django python  manage.py migrate
-        docker-compose exec -T chat_django python  manage.py test
     - name: Build and run containers
       run: |
         docker-compose -f docker-compose.yml build

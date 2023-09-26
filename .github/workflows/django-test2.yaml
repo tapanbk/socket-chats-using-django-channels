@@ -11,7 +11,7 @@ jobs:
       POSTGRES_PORT: 5432
       DJANGO_SECRET_KEY: 'django-insecure-t=q3r)r6mi93#qk&+x(!q7y7)m^_thr2shcedb*$t4$u#4m$1t'
     strategy:
-      max-parallel: 4
+      max-parallel: 1
       matrix:
         python-version: [ 3.9, ]
     steps:

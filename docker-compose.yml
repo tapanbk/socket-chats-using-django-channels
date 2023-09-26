@@ -34,6 +34,7 @@ services:
       - redis
       - postgres
     environment:
+      - DJANGO_READ_DOT_ENV_FILE=true
       - DJANGO_DB_HOST=postgres
       - DJANGO_DB_PORT=5432
       - DJANGO_DB_NAME=postgres

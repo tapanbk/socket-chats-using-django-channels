@@ -22,7 +22,7 @@ jobs:
     env:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-      POSTGRES_HOST: localhost # default host value for the database
+      POSTGRES_HOST: postgres # default host value for the database
       POSTGRES_DB: djtesting
       POSTGRES_PORT: 5432
       DJANGO_SECRET_KEY: 'django-insecure-t=q3r)r6mi93#qk&+x(!q7y7)m^_thr2shcedb*$t4$u#4m$1t'
@@ -61,7 +61,6 @@ jobs:
         run: |
           docker compose  -f demo-docker-compose.yml up -d
           docker-compose -f docker-compose.ci.yml build
-          docker rmi -f $(docker images -f "dangling=true" -q) || true
       - name: "Run test"
         run: |
           docker exec my-django-app python manage.py test

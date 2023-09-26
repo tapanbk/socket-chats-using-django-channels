@@ -1,0 +1,35 @@
+name: Django Docker github actions
+on:
+  push:
+    branches: [ master ]
+jobs:
+  build:
+    name: Build image
+    runs-on: ubuntu-22.04
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+    - name: Make Environment file
+      run: |      
+        touch .env
+        echo GITHUB_WORKFLOW=True >> .env
+        echo PROJECT_NAME="Socket Django channels" >> .env
+        echo DEBUG=True >> .env
+        echo DJANGO_CORS_ORIGIN_ALLOW_ALL=True >> .env
+        echo DJANGO_DB_ENGINE="django.db.backends.postgresql" >> .env
+        echo SECRET_KEY="django-insecure-t=q3r)r6mi93#qk&+x(!q7y7)m^_thr2shcedb*$t4$u#4m$1t" >> .env
+        echo POSTGRES_DB=postgres >> .env
+        echo POSTGRES_USER=postgres >> .env
+        echo POSTGRES_PASSWORD=postgres >> .env
+        echo DB_HOST=db >> .env
+    - name: Build and run containers
+      run: |
+        docker-compose -f docker-compose.yml build
+        docker-compose -f docker-compose.yml up -d
+    - name: Run Django tests
+      run: |
+        docker-compose -f docker-compose.yml exec -T django python manage.py test
+    - name: Stop and remove containers
+      run: |
+        docker-compose -f docker-compose.yml down
+        docker rmi -f $(docker images -f "dangling=true" -q) || true

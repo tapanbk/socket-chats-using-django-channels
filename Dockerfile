@@ -77,7 +77,9 @@ USER chat
 
 EXPOSE 8000
 
-ENTRYPOINT ["/home/chat/socket_chat/application_runner.sh"]
+ENTRYPOINT sh -c "python manage.py runserver 0.0.0.0:8000"
+
+#ENTRYPOINT ["/home/chat/socket_chat/application_runner.sh"]
 
 #COPY . .
 #

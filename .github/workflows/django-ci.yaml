@@ -28,7 +28,7 @@ jobs:
         docker-compose -f docker-compose.yml up -d
     - name: Run Django tests
       run: |
-        docker-compose -f docker-compose.yml exec -T django python manage.py test
+        docker-compose -f docker-compose.yml exec -T api python manage.py test
     - name: Stop and remove containers
       run: |
         docker-compose -f docker-compose.yml down

@@ -23,9 +23,11 @@ jobs:
         echo DB_PASSWORD=postgres >> .env
         echo DB_HOST=db >> .env
         echo DB_PORT=5432 >> .env
-    - name: Build and run containers
+    - name: Build containers
       run: |
         docker-compose -f docker-compose.yml build
+    - name: Run containers
+      run: |
         docker-compose -f docker-compose.yml up -d
     - name: Run Django tests
       run: |

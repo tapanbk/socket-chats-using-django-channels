@@ -48,7 +48,7 @@ RUN apk update \
     && apk add --no-cache --virtual .build-deps \
     ca-certificates gcc linux-headers musl-dev \
     libffi-dev jpeg-dev zlib-dev libc-dev \
-    postgresql-dev cargo
+    postgresql-dev cargo postgresql-client
 
 RUN pip install --upgrade pip
 

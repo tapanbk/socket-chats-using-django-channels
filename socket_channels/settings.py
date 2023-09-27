@@ -92,10 +92,6 @@ DATABASES = {
     }
 }
 
-TEST = {
-    'NAME': 'test_postgres_database',
-}
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators

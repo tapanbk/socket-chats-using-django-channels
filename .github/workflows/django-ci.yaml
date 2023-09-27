@@ -38,7 +38,7 @@ jobs:
         docker-compose exec -T api python manage.py migrate || true
     - name: Run test
       run: |
-        docker-compose  exec -T  api python manage.py test --keepdb --noinput --parallel || test
+        docker-compose  exec -T  api python manage.py test --keepdb || test
     - name: Display Docker Compose Logs
       run: |
         docker-compose logs

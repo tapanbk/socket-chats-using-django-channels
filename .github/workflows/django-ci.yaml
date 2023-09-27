@@ -41,7 +41,7 @@ jobs:
 #        docker-compose  exec -T  api python manage.py test --keepdb || true
     - name: Run test cases
       run: |
-        docker-compose exec -i api python manage.py test --keepdb || true
+        docker-compose exec -i api python manage.py test --keepdb
     - name: Display Docker Compose Logs
       run: |
         docker-compose logs

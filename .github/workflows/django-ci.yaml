@@ -36,11 +36,6 @@ jobs:
       run: |
         docker-compose exec -T api python manage.py makemigrations  || true
         docker-compose exec -T api python manage.py migrate || true
-    - name: Wait for PostgreSQL to be ready
-      run: |
-        while ! pg_isready -h postgres -U postgres -d test_postgres; do
-          sleep 1
-        done
     - name: Run test
       run: |
         docker-compose  exec -T  api python manage.py test --keepdb || true

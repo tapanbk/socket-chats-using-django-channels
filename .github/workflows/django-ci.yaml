@@ -36,13 +36,12 @@ jobs:
       run: |
         docker-compose exec -T api python manage.py makemigrations  || true
         docker-compose exec -T api python manage.py migrate || true
-      continue-on-error: true
+    - name: Run test
+      run: |
+        docker-compose  exec -T  api python manage.py test || test
     - name: Display Docker Compose Logs
       run: |
         docker-compose logs
-    - name: Run test
-      run: |
-        docker-compose -T  exec api python manage.py test
     - name: Stop and remove containers
       run: |
         docker-compose -f docker-compose.yml down

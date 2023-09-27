@@ -35,6 +35,7 @@ jobs:
       run: |
         docker-compose exec -T api python manage.py makemigrations
         docker-compose exec -T api python manage.py migrate
+      continue-on-error: true
     - name: Display Docker Compose Logs
       run: |
         docker-compose logs

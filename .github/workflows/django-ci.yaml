@@ -48,4 +48,3 @@ jobs:
     - name: Stop and remove containers
       run: |
         docker-compose -f docker-compose.yml down
-        docker rmi -f $(docker images -f "dangling=true" -q) || true

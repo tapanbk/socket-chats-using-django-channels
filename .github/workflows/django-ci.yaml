@@ -42,23 +42,23 @@ jobs:
     - name: Run test cases
       run: |
         docker-compose exec -i api python manage.py test --keepdb
-    - name: Display Docker Compose Logs
-      run: |
-        docker-compose logs
-    - name: Stop and remove containers
-      run: |
-        docker-compose -f docker-compose.yml down
+#    - name: Display Docker Compose Logs
+#      run: |
+#        docker-compose logs
+#    - name: Stop and remove containers
+#      run: |
+#        docker-compose -f docker-compose.yml down
 
-  deploy:
-    name: Deploy to EC2
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout the files
-        uses: actions/checkout@v2
-      - name: Deploy to Server 1
-        uses: easingthemes/ssh-deploy@main
-        env:
-          SSH_PRIVATE_KEY: ${{ secrets.EC2_SSH_KEY }}
-          REMOTE_HOST: ${{ secrets.HOST_DNS }}
-          REMOTE_USER: ${{ secrets.USERNAME }}
-          TARGET: ${{ secrets.TARGET_DIR }}
+#  deploy:
+#    name: Deploy to EC2
+#    runs-on: ubuntu-latest
+#    steps:
+#      - name: Checkout the files
+#        uses: actions/checkout@v2
+#      - name: Deploy to Server 1
+#        uses: easingthemes/ssh-deploy@main
+#        env:
+#          SSH_PRIVATE_KEY: ${{ secrets.EC2_SSH_KEY }}
+#          REMOTE_HOST: ${{ secrets.HOST_DNS }}
+#          REMOTE_USER: ${{ secrets.USERNAME }}
+#          TARGET: ${{ secrets.TARGET_DIR }}

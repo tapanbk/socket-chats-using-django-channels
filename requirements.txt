@@ -3,6 +3,8 @@ channels-redis==4.1.0
 Django==4.2.1
 django-environ==0.10.0
 django-storages==1.13.1
+Faker==21.0.0
 boto3==1.20.3
 psycopg2-binary==2.9.3
 sqlparse==0.4.4
+locust==2.20.0

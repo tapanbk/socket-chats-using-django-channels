@@ -1,6 +1,6 @@
 asgiref==3.6.0
 channels-redis==4.1.0
-Django==4.2.1
+Django==4.2.15
 django-environ==0.10.0
 django-storages==1.13.1
 Faker==21.0.0
